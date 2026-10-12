@@ -1,9 +1,9 @@
 # 游戏制作团队（game-dev-team）
 
-> **来源**：WorkBuddy 专家市场（用户 2026-10-09 安装并多会话使用过，见 `D:\Desktop\MYNOTE\note\tmp\WorkBuddy使用报告-2026-10-12.md`）。
+> **来源**：WorkBuddy 专家市场（本仓库作者自用环境，2026-10-09 起多会话使用）。
 > 成员人设来自本地缓存包 `game-design-experts 1.0.0`（narrative-designer / game-designer / game-audio-engineer / level-designer）与
 > `godot-roblox-experts 1.0.0`（godot-game-script-engineer / godot-shader-developer）；`ui-designer` 为内建推荐 curated-experts 描述级精简人设（本地无完整包）。
-> 包内通用辅助 skills（wechat-miniprogram / impeccable / novel-writing 等，合计 861KB）未入库，源路径：`~/.workbuddy-ai/plugins/cache/experts/game-design-experts/1.0.0/skills/`。
+> 包内通用辅助 skills（wechat-miniprogram / impeccable / novel-writing 等，合计 861KB）未入库。
 
 本团队以「《仙凡三国》生产季（2026-10-10~10-11）」实际使用过的 7 位专家为成员，可按需并行协作：
 

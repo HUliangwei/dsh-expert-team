@@ -1,6 +1,8 @@
 # headless 运行时 E2E overlay：给 headless profile 临时叠加 Agent Teams + dsh-expert-team
 # 用法：dsh --profile headless --patch <本文件> "<任务>"
 # 不修改 headless profile 本身（--patch 只对本次启动生效）。
+# ⚠️ 隐私：下方 LLM 网关 baseURL 为占位符 —— 真实内网地址统一存于 `private/env.json`
+#    （`llmGatewayBaseURL`），本地运行请改用 `../private/headless-teams.patch.yml`（已 gitignore）。
 - insert:
     - id: agent-team
       name: '@deepseek-ai/dsh-experimental-agent-team'
@@ -35,7 +37,7 @@
         displayName: 组内 DeepSeek
         apiKeyEnv: APIQPQI_API_KEY
         api: openai-completions
-        baseURL: https://ai-api.qrng.work:8043/v1
+        baseURL: https://<llm-gateway-private>/v1
         defaultInput:
           - text
           - image

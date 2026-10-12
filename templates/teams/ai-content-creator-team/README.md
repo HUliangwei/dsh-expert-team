@@ -1,8 +1,9 @@
 # AI 内容创作专家团（ai-content-creator-team）
 
-> **来源**：WorkBuddy 专家市场 `ai-content-creator-team` 1.0.0（CodeBuddy Teams 出品）。
-> 本目录为该包的**本地化副本**，供 dsh-expert-team 模板部署使用（个人自用，非再分发）。
-> 头像为包内置生成图；人设/知识为提示词文本。导出自 `~/.workbuddy-ai/plugins/cache/experts/ai-content-creator-team/1.0.0/`（2026-10-12）。
+> **来源说明**：人设/方法论为 `ai-content-creator-team` 1.0.0（WorkBuddy 专家市场，
+> CodeBuddy Teams 出品）的**文本**本地化副本，仅供个人自用、非再分发。
+> 原包内置的头像图片（`avatars/`）因版权原因**已移除**，不在本仓库/本插件中。
+> 团队成员卡片的展示不依赖任何图片素材。
 
 AI 驱动的多模态内容生产团队（6 人 + 主理人），覆盖从创意策划到成品交付的端到端能力：
 
@@ -19,7 +20,6 @@ AI 驱动的多模态内容生产团队（6 人 + 主理人），覆盖从创意
 |---|---|
 | `team.json` | 团队定义（sop / lead.prompt / members / prompts / skills） |
 | `team-agent.md` | 主理人完整人设（创意制片人司远，26.7KB 原稿） |
-| `avatars/` | 8 张 512×512 头像（team + 7 成员） |
 | `../../members/*/agent.md` | 6 位成员的人设原稿（去 frontmatter） |
 | `../../skills/ai-content-production/` | 技能包：SKILL.md + 6 份参考知识文档（策略/视频/图片/精修/编辑/改编） |
 

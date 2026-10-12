@@ -1,6 +1,9 @@
 # dependencies
 node_modules/
 
+# private / internal data (never published; see private/README.md)
+private/
+
 # transient e2e artifacts
 test/cdp-out/
 test/webe2e-app.png
