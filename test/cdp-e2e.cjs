@@ -293,7 +293,7 @@ class WS {
     hasArchiveBrowse: serverLocal.includes('"archive-list"') && serverLocal.includes('"restore"') && serverLocal.includes('readdirSync') && local.includes('"📂 归档浏览"'),
     hasLeadConvTitle: local.includes('cvNavName(leadRow.displayTitle') && local.includes('var leadRow = byId[leadId]'),
     hasCreationNorm: local.includes('AVATAR_ALIAS') && local.includes('charAvatar') && local.includes('runTop') && local.includes('top-title-sub') && local.includes('friendlyTitle(m2.name)'),
-    hasCurrentTeamDefault: local.includes('react.useState("current")') && local.includes('"当前团队"') && local.includes('"Current team"'),
+    hasCurrentTeamDefault: local.includes('react.useState("current")') && local.includes('"当前团队"') && local.includes('"Current team"') && (function () { var a = local.indexOf("var svgRef = react.useRef(null)"); var b = local.indexOf("空态（必须在本组件所有 hooks 之后返回"); return a > 0 && b > 0 && a < b; })(),
     hasMemberServer: serverLocal.includes('createMemberCommand') && serverLocal.includes('snapshotMember') && serverLocal.includes('ARCHIVE_ROOT') && serverLocal.includes('archive/') && serverLocal.includes('row.status === "running"') && serverLocal.includes('"expert-member"'),
     hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/expert-import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
     noImportBtnCode: !local.includes('slots.inject("conversation.input.left"') && !local.includes('function InputImport'),
