@@ -281,6 +281,8 @@ class WS {
     hasGraphCss: local.includes('oetC-node') && local.includes('oetHalo') && local.includes('oetC-motion') && local.includes('oetC-edge'),
     hasGraphStore: local.includes('sessions.list') && local.includes('listStore.subscribe') && local.includes('projectionsBySession') && local.includes('values.agentTeam'),
     hasGraphCircle: local.includes('CV_R') && local.includes('"body"') && local.includes('stdot') && local.includes('animateMotion') && local.includes('oetC-node is-lead') && local.includes('cvNavName') && local.includes('svgPoint'),
+    hasAvatarFace: local.includes('avatarFace') && local.includes('"face"') && local.includes('clipPath: "url(#cvFace-') && local.includes('preserveAspectRatio: "xMidYMid slice"') && local.includes('templates/avatars'),
+    hasCompactCanvas: !local.includes('var W = 780') && local.includes('var W = 660') && local.includes('Math.max(320, 205 + members.length * 36)') && local.includes('Math.min(196, 52 + members.length * 19)') && local.includes('graph-v3-'),
     hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/expert-import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
     noImportBtnCode: !local.includes('slots.inject("conversation.input.left"') && !local.includes('function InputImport'),
     noHeaderSeat: !local.includes('ctx.slots.inject("conversation.session.header.actions"') && !local.includes('function HeaderAction(') && !local.includes('"panel.written"'),
