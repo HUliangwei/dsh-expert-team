@@ -291,6 +291,7 @@ class WS {
     hasLeadCreateMenu: local.includes('oetMenuLead') && local.includes('menu.name === "lead"') && local.includes('oetMenuGrid') && local.includes('SHIPPED_TEAMS.map') && local.includes('"/expert-import " + tt.name') && local.includes('oetMenuLabel'),
     hasOpenConversation: local.includes('openMemberConversation') && local.includes('uiWorkspace.openSession') && local.includes('mode: "continuable"') && local.includes('"🔗 打开对话"'),
     hasArchiveBrowse: serverLocal.includes('"archive-list"') && serverLocal.includes('"restore"') && serverLocal.includes('readdirSync') && local.includes('"📂 归档浏览"') && local.includes('setComposerDraft(pluginCtx, sid(), text)') && local.includes('navigator.clipboard'),
+    hasDomDraft: local.includes('function domSetDraft') && local.includes('Object.getPrototypeOf(el)') && local.includes('return domSetDraft(text)') && local.includes('InputEvent'),
     hasFullMemberMenu: local.includes('oetMenuGridScroll') && local.includes('SHIPPED_MEMBERS.length') && !local.includes('SHIPPED_MEMBERS.slice(0, 8)'),
     hasLeadConvTitle: local.includes('cvNavName(leadRow.displayTitle') && local.includes('var leadRow = byId[leadId]'),
     hasCreationNorm: local.includes('AVATAR_ALIAS') && local.includes('charAvatar') && local.includes('runTop') && local.includes('top-title-sub') && local.includes('friendlyTitle(m2.name)'),
