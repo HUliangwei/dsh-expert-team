@@ -286,6 +286,8 @@ class WS {
     hasCompactCanvas: !local.includes('var W = 780') && !local.includes('var W = 660') && local.includes('var W = 620') && local.includes('Math.max(285, 175 + members.length * 28)') && local.includes('Math.min(158, 44 + members.length * 14)') && local.includes('graph-v4-') && local.includes('max-height: 56vh'),
     hasNodeMenu: local.includes('stMenu') && local.includes('openMenu') && local.includes('commitRename') && local.includes('.oetMenu') && local.includes('oetMenuBtn') && local.includes('catalog.rename'),
     hasMemberCmdClient: local.includes('"/expert-member archive "') && local.includes('"/expert-member restock "') && local.includes('"rename"') && local.includes('oetMenuFoot'),
+    hasCanvasDismiss: local.includes('.oetC-node")) return') && local.includes('if (menu) closeMenu()'),
+    hasAutoTitle: local.includes('autoTitleMembers') && local.includes('friendlyTitle') && local.includes('autoTitleSeen') && local.includes('catalog.rename(m2.id, fr)'),
     hasMemberServer: serverLocal.includes('createMemberCommand') && serverLocal.includes('snapshotMember') && serverLocal.includes('ARCHIVE_ROOT') && serverLocal.includes('archive/') && serverLocal.includes('row.status === "running"') && serverLocal.includes('"expert-member"'),
     hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/expert-import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
     noImportBtnCode: !local.includes('slots.inject("conversation.input.left"') && !local.includes('function InputImport'),
