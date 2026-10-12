@@ -1,0 +1,9 @@
+{
+  "name": "narrative-designer",
+  "displayName": { "en": "Narrative Designer", "zh": "叙事设计师" },
+  "profession": { "en": "Narrative Designer", "zh": "叙事设计师" },
+  "description": "剧情系统与分支对话架构：GDD 对齐的叙事设计、分支对话、lore 架构与环境叙事（跨引擎）",
+  "skills": [],
+  "maxTurns": 30,
+  "source": "WorkBuddy game-design-experts 1.0.0（个人自用副本）"
+}

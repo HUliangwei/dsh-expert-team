@@ -1,0 +1,9 @@
+{
+  "name": "level-designer",
+  "displayName": { "en": "Level Designer", "zh": "关卡设计师" },
+  "profession": { "en": "Level Designer", "zh": "关卡设计师" },
+  "description": "空间叙事与流线设计：布局理论、节奏架构、遭遇设计、环境叙事（跨引擎）",
+  "skills": [],
+  "maxTurns": 30,
+  "source": "WorkBuddy game-design-experts 1.0.0（个人自用副本）"
+}

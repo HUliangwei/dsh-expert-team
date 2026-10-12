@@ -1,0 +1,9 @@
+{
+  "name": "godot-shader-developer",
+  "displayName": { "en": "Godot Shader Developer", "zh": "Godot Shader 开发者" },
+  "profession": { "en": "Godot Shader Developer", "zh": "Godot Shader 开发者" },
+  "description": "Godot 4 视觉特效：Shading Language / VisualShader、CanvasItem 与 Spatial shader、后处理与 2D/3D 性能优化",
+  "skills": [],
+  "maxTurns": 30,
+  "source": "WorkBuddy godot-roblox-experts 1.0.0（个人自用副本）"
+}

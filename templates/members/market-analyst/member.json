@@ -1,0 +1,8 @@
+{
+  "name": "market-analyst",
+  "displayName": { "en": "Market Analyst", "zh": "技术分析师" },
+  "profession": { "en": "Technical Analyst", "zh": "技术分析师（行情/量化）" },
+  "description": "从 K 线、均线、量价与指标角度分析行情，输出趋势判断与关键价位",
+  "skills": [],
+  "maxTurns": 40
+}

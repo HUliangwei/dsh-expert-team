@@ -1,0 +1,9 @@
+{
+  "name": "game-designer",
+  "displayName": { "en": "Game Designer", "zh": "游戏设计师" },
+  "profession": { "en": "Game Designer", "zh": "游戏设计师" },
+  "description": "系统与机制架构：GDD 撰写、玩家心理、经济平衡、玩法循环设计（跨引擎跨品类）",
+  "skills": [],
+  "maxTurns": 30,
+  "source": "WorkBuddy game-design-experts 1.0.0（个人自用副本）"
+}

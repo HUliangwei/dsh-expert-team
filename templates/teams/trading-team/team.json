@@ -1,0 +1,15 @@
+{
+  "name": "trading-team",
+  "displayName": { "en": "Trading Analysis Team", "zh": "交易分析团队" },
+  "description": "A股/港股/美股投资分析：信息收集 → 技术面分析 → 复核风控 → 最终建议",
+  "sop": "本团队 4 阶段协作流程：\n① researcher 收集标的与行业信息（含来源）；\n② market-analyst 出具技术面判断（趋势/关键位/风险位）；\n③ reviewer 复核前两步的遗漏与风险（P0-P2 问题清单）；\n④ 主理人整合为 BUY / SELL / HOLD 建议 + 完整操作方案，并明确提示不构成投资建议。",
+  "lead": {
+    "profession": { "en": "Team Lead & Orchestrator", "zh": "主理人（投资分析编排）" },
+    "prompt": "你负责把用户的投资分析请求拆成阶段任务并分派：先让 researcher 收集信息，再让 market-analyst 做技术面分析，再让 reviewer 复核，收齐后由你整合成最终建议。每个阶段必须收齐产出才进入下一阶段；对成员产出有疑问就追问一round。"
+  },
+  "members": [
+    { "name": "researcher", "template": "researcher" },
+    { "name": "analyst", "template": "market-analyst" },
+    { "name": "reviewer", "template": "reviewer" }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "video-generator",
+  "displayName": { "en": "Veo - Video Generation Expert", "zh": "视频生成专家 - 维欧" },
+  "profession": { "en": "Video Generation Expert", "zh": "视频生成专家" },
+  "description": "文生/图生视频、多模型选型（HY-Video-1.5/YT-Video-2.0/HumanActor/FX）与视频 Prompt 工程",
+  "skills": ["ai-content-production"],
+  "maxTurns": 30,
+  "source": "WorkBuddy ai-content-creator-team 1.0.0（个人自用副本）"
+}

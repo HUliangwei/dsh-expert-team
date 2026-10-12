@@ -1,0 +1,9 @@
+{
+  "name": "ui-designer",
+  "displayName": { "en": "UI Designer", "zh": "UI 设计师" },
+  "profession": { "en": "UI Designer", "zh": "UI 设计师" },
+  "description": "设计系统与组件库：像素级完美、无障碍界面、交互规范与可用性",
+  "skills": [],
+  "maxTurns": 30,
+  "source": "WorkBuddy 内建推荐 curated-experts（描述级精简人设，本地无完整包）"
+}

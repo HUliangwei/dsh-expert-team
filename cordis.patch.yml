@@ -1,0 +1,7 @@
+# dsh-expert-team bundle for DeepSeek Harness (dsh).
+# 叠加在 dsh-experimental-agent-team-profile 之后（bundles 数组顺序即应用顺序）。
+# 插件行 name 通过 profile node_modules 解析（dsh-expert-team 以 junction/link 方式存在于其中）。
+# 注册：服务端模板发现 + 部署工具（按成员 scope 安装，Lead 才可部署）。
+- insert:
+    - id: expert-team
+      name: dsh-expert-team

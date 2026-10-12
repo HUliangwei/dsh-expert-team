@@ -1,0 +1,9 @@
+{
+  "name": "image-creator",
+  "displayName": { "en": "Percy - Image & Text Creator", "zh": "图文创作专家 - 珀西" },
+  "profession": { "en": "Image & Text Creator", "zh": "图文创作专家" },
+  "description": "AI 图片生成（HY-Image-V3.0/Lite/ImageGen/ImageEdit）、7 种场景策略、批量生成与发布级精修",
+  "skills": ["ai-content-production"],
+  "maxTurns": 30,
+  "source": "WorkBuddy ai-content-creator-team 1.0.0（个人自用副本）"
+}

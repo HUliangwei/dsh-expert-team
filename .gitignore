@@ -1,0 +1,11 @@
+# dependencies
+node_modules/
+
+# transient e2e artifacts
+test/cdp-out/
+test/webe2e-app.png
+*.log
+
+# os / editor
+.DS_Store
+Thumbs.db

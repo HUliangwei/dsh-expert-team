@@ -1,0 +1,9 @@
+{
+  "name": "copywriter",
+  "displayName": { "en": "Penn - Copywriter", "zh": "文案创作专家 - 笔澜" },
+  "profession": { "en": "Copywriter", "zh": "文案创作专家" },
+  "description": "公众号/知乎/博客长文、小红书/社媒短文案、视频脚本、营销文案、SEO 内容",
+  "skills": ["ai-content-production"],
+  "maxTurns": 30,
+  "source": "WorkBuddy ai-content-creator-team 1.0.0（个人自用副本）"
+}

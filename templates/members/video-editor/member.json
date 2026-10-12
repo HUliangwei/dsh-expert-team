@@ -1,0 +1,9 @@
+{
+  "name": "video-editor",
+  "displayName": { "en": "Clip - Video Editing Expert", "zh": "视频编辑专家 - 柯立" },
+  "profession": { "en": "Video Editing Expert", "zh": "视频编辑专家" },
+  "description": "Track 结构视频编辑（5 元素 + 11 滤镜）：裁剪/拼接/转场/字幕/音频/滤镜/去水印/多片合成",
+  "skills": ["ai-content-production"],
+  "maxTurns": 30,
+  "source": "WorkBuddy ai-content-creator-team 1.0.0（个人自用副本）"
+}

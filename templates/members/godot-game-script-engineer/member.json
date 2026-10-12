@@ -1,0 +1,9 @@
+{
+  "name": "godot-game-script-engineer",
+  "displayName": { "en": "Godot Gameplay Scripter", "zh": "Godot 脚本工程师" },
+  "profession": { "en": "Godot Gameplay Scripter", "zh": "Godot 脚本工程师" },
+  "description": "Godot 4 游玩系统：GDScript 2.0 / C# 集成、节点架构、类型安全信号设计",
+  "skills": [],
+  "maxTurns": 30,
+  "source": "WorkBuddy godot-roblox-experts 1.0.0（个人自用副本）"
+}

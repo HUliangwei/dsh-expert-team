@@ -1,0 +1,9 @@
+{
+  "name": "content-adapter",
+  "displayName": { "en": "Ada - Content Adaptation Expert", "zh": "素材改编专家 - 艾达" },
+  "profession": { "en": "Content Adaptation Expert", "zh": "素材改编专家" },
+  "description": "视频内容分析（YT-VITA）、精彩片段提取、视频翻译（声纹克隆+唇型同步）、多媒体合成",
+  "skills": ["ai-content-production"],
+  "maxTurns": 20,
+  "source": "WorkBuddy ai-content-creator-team 1.0.0（个人自用副本）"
+}

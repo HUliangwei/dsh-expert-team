@@ -1,0 +1,56 @@
+# headless 运行时 E2E overlay：给 headless profile 临时叠加 Agent Teams + dsh-expert-team
+# 用法：dsh --profile headless --patch <本文件> "<任务>"
+# 不修改 headless profile 本身（--patch 只对本次启动生效）。
+- insert:
+    - id: agent-team
+      name: '@deepseek-ai/dsh-experimental-agent-team'
+      config:
+        maxMembers: 8
+        maxTasks: 256
+        maxPendingMessagesPerMember: 64
+        maxMessageBytes: 65536
+        disposalTimeoutMs: 5000
+
+    - id: tool-agent-team
+      name: '@deepseek-ai/dsh-experimental-tool-agent-team'
+      config:
+        freshProvider: spawn
+        forkProvider: fork
+
+    - id: expert-team
+      name: dsh-expert-team
+
+# ── 用 web profile 同款「组内网关」跑模型（官方 DeepSeek 欠费 QUOTA；apiqpqi 有余额）──
+- id: agent-default-model
+  name: "@deepseek-ai/dsh-agent-default-model"
+  config:
+    provider: apiqpqi
+    model: deepseek-v4-flash-fp8
+
+- id: llm-pi-ai
+  name: "@deepseek-ai/dsh-llm-pi-ai"
+  config:
+    providers:
+      apiqpqi:
+        displayName: 组内 DeepSeek
+        apiKeyEnv: APIQPQI_API_KEY
+        api: openai-completions
+        baseURL: https://ai-api.qrng.work:8043/v1
+        defaultInput:
+          - text
+          - image
+        maxRequestImageBytes: 1
+        models:
+          - id: deepseek-v4-flash-fp8
+            name: deepseek-v4-flash-fp8
+          - id: GLM-5.3-Flash
+            name: GLM-5.3-Flash
+        streamIdleTimeoutMs: 180000
+        timeoutMs: 300000
+        retryPolicy:
+          mode: normal
+          maxRetries: 1
+          retryableCodes:
+            - RATE_LIMIT
+            - TIMEOUT
+            - TRANSPORT

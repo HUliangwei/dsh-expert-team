@@ -1,0 +1,8 @@
+{
+  "name": "reviewer",
+  "displayName": { "en": "Reviewer", "zh": "评审" },
+  "profession": { "en": "Reviewer", "zh": "评审（代码/文档）" },
+  "description": "对代码或文档做结构化审查，输出问题清单与改进建议",
+  "skills": [],
+  "maxTurns": 40
+}
