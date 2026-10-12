@@ -289,6 +289,8 @@ class WS {
     hasCanvasDismiss: local.includes('.oetC-node")) return') && local.includes('if (menu) closeMenu()'),
     hasRetitleAll: local.includes('AUTO_TITLES') && local.includes('localStorage.getItem(doneKey)') && local.includes('dsh-expert-team-title-') && local.includes('catalog.rename(m2.id, fr)'),
     hasLeadCreateMenu: local.includes('oetMenuLead') && local.includes('menu.name === "lead"') && local.includes('oetMenuGrid') && local.includes('SHIPPED_TEAMS.map') && local.includes('"/expert-import " + tt.name') && local.includes('oetMenuLabel'),
+    hasOpenConversation: local.includes('openMemberConversation') && local.includes('uiWorkspace.openSession') && local.includes('mode: "continuable"') && local.includes('"🔗 打开对话"'),
+    hasArchiveBrowse: serverLocal.includes('"archive-list"') && serverLocal.includes('"restore"') && serverLocal.includes('readdirSync') && local.includes('"📂 归档浏览"'),
     hasMemberServer: serverLocal.includes('createMemberCommand') && serverLocal.includes('snapshotMember') && serverLocal.includes('ARCHIVE_ROOT') && serverLocal.includes('archive/') && serverLocal.includes('row.status === "running"') && serverLocal.includes('"expert-member"'),
     hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/expert-import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
     noImportBtnCode: !local.includes('slots.inject("conversation.input.left"') && !local.includes('function InputImport'),
