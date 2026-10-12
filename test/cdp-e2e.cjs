@@ -262,6 +262,7 @@ class WS {
   // 无构建链（ModuleLoader 直吐 lib/client.js），本地文件 == 服务端内容；
   // 侧栏托盘移除以「我们代码里不再有该槽串」断言（整包合并资源含 sidebar-right 自身源码，不能在此层面断言）。
   const local = fs.readFileSync(__dirname + '/../lib/client.js', 'utf8');
+  const serverLocal = fs.readFileSync(__dirname + '/../lib/index.js', 'utf8');
   const localMarks = {
     hasViewId: local.includes('expert-team-templates'),
     hasConversationViewInject: local.includes('ctx.slots.inject("conversation.view"'),
@@ -282,7 +283,10 @@ class WS {
     hasGraphStore: local.includes('sessions.list') && local.includes('listStore.subscribe') && local.includes('projectionsBySession') && local.includes('values.agentTeam'),
     hasGraphCircle: local.includes('CV_R') && local.includes('"body"') && local.includes('stdot') && local.includes('animateMotion') && local.includes('oetC-node is-lead') && local.includes('cvNavName') && local.includes('svgPoint'),
     hasAvatarFace: local.includes('avatarFace') && local.includes('"face"') && local.includes('clipPath: "url(#cvFace-') && local.includes('preserveAspectRatio: "xMidYMid slice"') && local.includes('templates/avatars'),
-    hasCompactCanvas: !local.includes('var W = 780') && local.includes('var W = 660') && local.includes('Math.max(320, 205 + members.length * 36)') && local.includes('Math.min(196, 52 + members.length * 19)') && local.includes('graph-v3-'),
+    hasCompactCanvas: !local.includes('var W = 780') && !local.includes('var W = 660') && local.includes('var W = 620') && local.includes('Math.max(285, 175 + members.length * 28)') && local.includes('Math.min(158, 44 + members.length * 14)') && local.includes('graph-v4-') && local.includes('max-height: 56vh'),
+    hasNodeMenu: local.includes('stMenu') && local.includes('openMenu') && local.includes('commitRename') && local.includes('.oetMenu') && local.includes('oetMenuBtn') && local.includes('catalog.rename'),
+    hasMemberCmdClient: local.includes('"/expert-member archive "') && local.includes('"/expert-member restock "') && local.includes('"rename"') && local.includes('oetMenuFoot'),
+    hasMemberServer: serverLocal.includes('createMemberCommand') && serverLocal.includes('snapshotMember') && serverLocal.includes('ARCHIVE_ROOT') && serverLocal.includes('archive/') && serverLocal.includes('row.status === "running"') && serverLocal.includes('"expert-member"'),
     hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/expert-import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
     noImportBtnCode: !local.includes('slots.inject("conversation.input.left"') && !local.includes('function InputImport'),
     noHeaderSeat: !local.includes('ctx.slots.inject("conversation.session.header.actions"') && !local.includes('function HeaderAction(') && !local.includes('"panel.written"'),

@@ -12,3 +12,7 @@ test/webe2e-app.png
 # os / editor
 .DS_Store
 Thumbs.db
+
+# 成员归档快照（/expert-member archive|restock 产物，本地保留）
+archive/
+
