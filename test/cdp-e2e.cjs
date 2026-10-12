@@ -279,7 +279,7 @@ class WS {
     hasCmdRoute: local.includes('deployDraft') && local.includes('"/expert-import " + name') && !local.includes('installImportContribution'),
     hasGraphPage: local.includes('"panel.page.current"') && local.includes('"current"') && local.includes('page === "individuals" ? funcSections : currentTeamGraph'),
     hasGraphCss: local.includes('oetGEdge') && local.includes('oetGDot') && local.includes('oetGLeg'),
-    hasGraphStore: local.includes('useSyncExternalStore') && local.includes('projectionsBySession') && local.includes('values.agentTeam'),
+    hasGraphStore: local.includes('sessions.list') && local.includes('listStore.subscribe') && local.includes('projectionsBySession') && local.includes('values.agentTeam'),
     hasGraphStar: local.includes('memberAnchor') && local.includes('oetGNode is-lead') && local.includes('panel.graph.lead') && local.includes('panel.graph.edge'),
     hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/expert-import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
     noImportBtnCode: !local.includes('slots.inject("conversation.input.left"') && !local.includes('function InputImport'),
