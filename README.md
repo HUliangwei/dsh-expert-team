@@ -62,3 +62,11 @@ node --check lib/index.js lib/client.js
 # 内部 e2e：见 test/cdp-e2e.cjs 头部用法（需 DSH headless profile + CDP）
 ```
 
+## Roadmap / 待办
+
+- **移除/归档子智能体**（`/expert-remove` + 成员卡按钮 + `expert_member_remove` 工具，Lead-only）：
+  停用运行（官方 `subagents.drainContinuableChildren` 通道）+ 对话快照归档到工作区 `archive/<名字>/`；
+  官方 agent-team 目前无单成员删除 API，v1 语义为「停用 + 归档 + 面板隐藏」。
+- 备注：一个 Team 的成员上限由 `agent-teams.config.maxMembers` 决定（官方默认 16，min 1）；roster 只增不减、成员名不复用。
+
+
