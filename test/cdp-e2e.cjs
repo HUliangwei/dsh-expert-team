@@ -175,7 +175,7 @@ class WS {
   for (let attempt = 0; attempt < 6; attempt++) {
     menu = null;
     for (let i = 0; i < 20; i++) {
-      menu = await evalJs(`(()=>{const ov=document.querySelector('[data-slot="conversation.input.overlay"]');const t=ov?ov.innerText:'';return {ov:!!ov,hasCommands:t.includes('指令'),hasHost:t.includes('expert-import'),hasImportRow:t.includes('导入成员和专家团'),expert:t.includes('expert-import')};})()`);
+      menu = await evalJs(`(()=>{const ov=document.querySelector('[data-slot="conversation.input.overlay"]');const t=ov?ov.innerText:'';return {ov:!!ov,hasCommands:t.includes('指令'),hasHost:t.includes('dsh-agent'),hasImportRow:t.includes('导入成员和专家团'),expert:t.includes('dsh-agent')};})()`);
       log('menu-poll', attempt + '/' + i, JSON.stringify(menu));
       if (menu && (menu.hasHost || menu.hasCommands)) break;
       await sleep(500);
@@ -183,7 +183,7 @@ class WS {
     if (menu && menu.hasHost) break;
     if (menu && menu.hasCommands) {
       // 指令区展开但 host 行未渲染 → 滚动后再看
-      const rolled = await evalJs(`(()=>{const ov=document.querySelector('[data-slot="conversation.input.overlay"]');const menu=ov&&ov.querySelector('[data-trigger-menu]');if(!menu)return false;for(let i=0;i<16;i++){menu.scrollTop=menu.scrollHeight;}return (menu.innerText||'').includes('expert-import');})()`);
+      const rolled = await evalJs(`(()=>{const ov=document.querySelector('[data-slot="conversation.input.overlay"]');const menu=ov&&ov.querySelector('[data-trigger-menu]');if(!menu)return false;for(let i=0;i<16;i++){menu.scrollTop=menu.scrollHeight;}return (menu.innerText||'').includes('dsh-agent');})()`);
       if (rolled) { menu.hasHost = true; break; }
     }
     await esc(); await sleep(500);
@@ -200,7 +200,7 @@ class WS {
       if(ed){ if(typeof ed.value==='string') draftText=ed.value; else draftText=ed.innerText||ed.textContent||''; }
       const plusBtns=[...document.querySelectorAll('button')].map(b=>({t:(b.innerText||'').trim().slice(0,20),al:b.getAttribute&&b.getAttribute('aria-label'),tt:b.getAttribute&&b.getAttribute('title')})).filter(x=>x.al||x.tt||x.t.includes('+')||x.t.includes('加'));
       const t=document.body.innerText;
-      return { ovExists:!!ov, rows: rows.slice(0,40), active:ae?ae.tagName+'.'+String(ae.className||'').slice(0,40):'', draftText:String(draftText).slice(0,80), plusBtns:plusBtns.slice(0,12), hasHost:t.includes('expert-import'), hasImportRow:t.includes('导入成员和专家团'), hasCompact:t.includes('压缩'), hasPerm:t.includes('权限'), hasModel:t.includes('模型'), hasAdd:t.includes('添加') };
+      return { ovExists:!!ov, rows: rows.slice(0,40), active:ae?ae.tagName+'.'+String(ae.className||'').slice(0,40):'', draftText:String(draftText).slice(0,80), plusBtns:plusBtns.slice(0,12), hasHost:t.includes('dsh-agent'), hasImportRow:t.includes('导入成员和专家团'), hasCompact:t.includes('压缩'), hasPerm:t.includes('权限'), hasModel:t.includes('模型'), hasAdd:t.includes('添加') };
     })()`);
     menuDom = menuDomRaw;
     log('menuDom', JSON.stringify(menuDom, null, 1));
@@ -210,8 +210,8 @@ class WS {
     const slashClean = await evalJs(`(()=>{const ov=document.querySelector('[data-slot="conversation.input.overlay"]');const menu=ov&&ov.querySelector('[data-trigger-menu]');if(!menu)return {menu:false};return {grpN:menu.querySelectorAll('[data-oet-grp]').length,impN:menu.querySelectorAll('[data-oet-import-group]').length,heads:[...menu.querySelectorAll('[class*="sectionTitle"]')].map(h=>(h.textContent||'').trim().replace(/\\s+/g,' ')).slice(0,6)};})()`);
     log('slash-clean', JSON.stringify(slashClean));
 
-    // Round 28c：菜单里只认宿主 /expert-import 指令行（kantu 同款）——不再有任何
-    // 本插件 commandUi 弹层行（「导入成员和专家团」已按用户要求移除）。
+    // Round 28c/56d：菜单里只认宿主 /dsh-agent 指令行（kantu 同款）——不再有任何
+    // 本插件 commandUi 弹层行（「导入成员和专家团」已按用户要求移除），旧 /expert-* 别名已下线。
     // 宿主把未列表指令排在指令区最底部 → 先滚动菜单到底再取证（innerText 判定，
     // 虚拟列表叶子元素不可靠）。
     const hostRow = await evalJs(`(()=>{
@@ -220,8 +220,8 @@ class WS {
       if(!menu) return {menu:false};
       for(let i=0;i<16;i++){menu.scrollTop=menu.scrollHeight;}
       const txt=menu.innerText||'';
-      const descM=txt.match(/expert-import[^\\n]*((?:\\n|.){0,120})/);
-      return {menu:true, hasHostRow:txt.includes('expert-import'), hasHostDesc:txt.includes('--ctx fresh|fork')&&txt.includes('--model'), hostDescText:descM?descM[1].replace(/\\s+/g,' ').trim().slice(0,120):'', hasImportRow:txt.includes('导入成员和专家团')};
+      const descM=txt.match(/dsh-agent[^\\n]*((?:\\n|.){0,120})/);
+      return {menu:true, hasHostRow:txt.includes('dsh-agent'), hasHostDesc:txt.includes('import <模板>')&&txt.includes('task <create|claim'), hostDescText:descM?descM[1].replace(/\\s+/g,' ').trim().slice(0,120):'', hasImportRow:txt.includes('导入成员和专家团')};
     })()`);
     log('hostRow', JSON.stringify(hostRow));
     fs.writeFileSync(outDir + '/host-row.json', JSON.stringify(hostRow, null, 1));
@@ -277,22 +277,22 @@ class WS {
     hasGameExperts: local.includes('game-dev-team') && local.includes('narrative-designer') && local.includes('godot-shader-developer') && local.includes('ui-designer') && local.includes('"panel.func.game"') && local.includes('"content", "game"') && local.includes('叙事设计师'),
     hasTeamCardRich: local.includes('TEAM_BADGE') && local.includes('oetTbadge') && local.includes('oetChips') && local.includes('oetChip') && !local.includes('oetKind member" }, t("import.member")') && local.includes('oetKind member" }, t("panel.members")'),
     hasNoMentionUpgrade: !local.includes('installNativeMentionUpgrade') && !local.includes('nativeMenuNow') && !local.includes('injectImportGroup') && !local.includes('lastMentionAt') && !local.includes('buildMentionSections') && !local.includes('data-trigger-menu') && !local.includes('data-oet-grp') && !local.includes('oetGrpChev') && !local.includes('panel.mention') && !local.includes('installMentionOverlay') && !local.includes('oetMentionOv'),
-    hasCmdRoute: local.includes('deployDraft') && local.includes('"/expert-import " + name') && !local.includes('installImportContribution'),
+    hasCmdRoute: local.includes('deployDraft') && local.includes('"/dsh-agent import " + name') && !local.includes('installImportContribution'),
     hasGraphPage: local.includes('"panel.page.current"') && local.includes('"current"') && local.includes('h(CurrentTeamCanvas'),
-    hasGraphCss: local.includes('oetC-node') && local.includes('oetHalo') && local.includes('oetMdot') && local.includes('oetC-edge'),
+    hasGraphCss: local.includes('oetC-node') && local.includes('oetPulse') && local.includes('oetMdot') && local.includes('oetC-edge'),
     hasGraphStore: local.includes('sessions.list') && local.includes('listStore.subscribe') && local.includes('projectionsBySession') && local.includes('values.agentTeam'),
     hasGraphCircle: local.includes('CV_R') && local.includes('"body"') && local.includes('stdot') && local.includes('oetC-node is-lead') && local.includes('cvNavName') && local.includes('svgPoint'),
     hasRealPulse: local.includes('function spawnMdot') && local.includes('el.animate') && local.includes('getScreenCTM') && local.includes('"oetMdot"') && local.includes('anim.finished') && local.includes('last.__boot') && local.includes('chained') && local.includes('runNow ? "out" : "in"') && !local.includes('animateMotion'),
     hasTaskNodes: local.includes('oetT-node') && local.includes('TASK_ZONE') && local.includes('taskCardPos') && local.includes('team.tasks') && local.includes('taskOwner') && local.includes('last.__tasks') && local.includes('"oetT-edge"') && local.includes('ow && busy') && local.includes('togglePin') && local.includes('loadTaskPins') && local.includes('is-pinned') && local.includes('is-selected') && local.includes('"📌 取消置顶"') && local.includes('badgeTxt') && local.includes('oetMenuFaceEmoji') && local.includes('is-done') && local.includes('.oetT-node:hover') && local.includes('closest(".oetT-node")') && local.includes('is-new') && local.includes('dividerY') && local.includes('gapX') && local.includes('oetT-divider') && local.includes('"task:new"') && local.includes('var tkId = tk.id') && local.includes('stScroll') && local.includes('onWheel: function') && local.includes('tVis') && local.includes('滚轮翻动') && local.includes('__v54') && local.includes('var tLo') && local.includes('tHi > tLo') && local.includes('gapX * (i + 1)') && local.includes('b.revision || 0) - (a.revision || 0)') && !local.includes('va - vb') && !local.includes('dividerX') && !local.includes('TASK_ZONE.gap *') && !local.includes('viewTasks = allTasks.slice') && !local.includes('pinCheck') && !local.includes('cvTaskPos'),
     hasMemberName: local.includes('rr.displayName || mr.displayName || mr.name') && !local.includes('rr.displayTitle || rr.title'),
-    hasTaskMenu: local.includes('"task:" + tkId') && local.includes('taskMenuEl') && local.includes('runTask("task.claim"') && local.includes('runTask("task.complete"') && local.includes('runTask("task.delete"') && local.includes('runTask("task.edit"') && local.includes('runTask("task.create"') && local.includes('"confirmDel"') && local.includes('mode: "owner"') && local.includes('oetMenuWrap') && serverLocal.includes('"expert-task"') && serverLocal.includes('createTask') && serverLocal.includes('action: "reassign"') && serverLocal.includes('"--desc"'),
+    hasTaskMenu: local.includes('"task:" + tkId') && local.includes('taskMenuEl') && local.includes('runTask("task.claim"') && local.includes('runTask("task.complete"') && local.includes('runTask("task.delete"') && local.includes('runTask("task.edit"') && local.includes('runTask("task.create"') && local.includes('"confirmDel"') && local.includes('mode: "owner"') && local.includes('oetMenuWrap') && serverLocal.includes('"dsh-agent"') && serverLocal.includes('createTask') && serverLocal.includes('action: "reassign"') && serverLocal.includes('"--desc"'),
     hasAvatarFace: local.includes('avatarFace') && local.includes('"face"') && local.includes('clipPath: "url(#cvFace-') && local.includes('preserveAspectRatio: "xMidYMid slice"') && local.includes('templates/avatars'),
     hasCompactCanvas: !local.includes('var W = 780') && !local.includes('var W = 660') && local.includes('var W = 620') && local.includes('Math.max(320, 175 + members.length * 28') && local.includes('Math.min(158, 44 + members.length * 14)') && local.includes('graph-v4-') && local.includes('max-height: 56vh'),
     hasNodeMenu: local.includes('stMenu') && local.includes('openMenu') && local.includes('commitRename') && local.includes('.oetMenu') && local.includes('oetMenuBtn') && local.includes('catalog.rename'),
     hasMemberCmdClient: local.includes('askConfirm("member.restock"') && local.includes('askConfirm("member.archive"') && local.includes('"rename"') && local.includes('oetMenuFoot') && local.includes('rpcAct("member.archiveList"'),
     hasCanvasDismiss: local.includes('closest(".oetC-node")') && local.includes('closest(".oetT-node")') && local.includes('closest(".oetMenu")') && local.includes('if (menu) closeMenu()'),
     hasRetitleAll: local.includes('AUTO_TITLES') && local.includes('localStorage.getItem(doneKey)') && local.includes('dsh-expert-team-title-') && local.includes('catalog.rename(m2.id, fr)'),
-    hasLeadCreateMenu: local.includes('oetMenuLead') && local.includes('menu.name === "lead"') && local.includes('oetMenuGrid') && local.includes('SHIPPED_TEAMS.map') && local.includes('"/expert-import " + tt.name') && local.includes('oetMenuLabel'),
+    hasLeadCreateMenu: local.includes('oetMenuLead') && local.includes('menu.name === "lead"') && local.includes('oetMenuGrid') && local.includes('SHIPPED_TEAMS.map') && local.includes('"/dsh-agent import " + tt.name') && local.includes('oetMenuLabel'),
     hasOpenConversation: local.includes('openMemberConversation') && local.includes('uiWorkspace.openSession') && local.includes('mode: "continuable"') && local.includes('"🔗 打开对话"'),
     hasArchiveBrowse: serverLocal.includes('"archive-list"') && serverLocal.includes('"restore"') && serverLocal.includes('readdirSync') && local.includes('"📂 归档浏览"') && local.includes('setComposerDraft(pluginCtx, sid(), text)') && local.includes('navigator.clipboard'),
     hasDomDraft: local.includes('function domSetDraft') && local.includes('Object.getPrototypeOf(el)') && local.includes('return domSetDraft(text)') && local.includes('InputEvent'),
@@ -300,9 +300,9 @@ class WS {
     hasLeadConvTitle: local.includes('cvNavName(leadRow.displayTitle') && local.includes('var leadRow = byId[leadId]'),
     hasCreationNorm: local.includes('AVATAR_ALIAS') && local.includes('charAvatar') && local.includes('runTop') && local.includes('top-title-sub') && local.includes('friendlyTitle(m2.name)'),
     hasCurrentTeamDefault: local.includes('react.useState("current")') && local.includes('"当前团队"') && local.includes('"Current team"') && (function () { var a = local.indexOf("var svgRef = react.useRef(null)"); var b = local.indexOf("空态（必须在本组件所有 hooks 之后返回"); return a > 0 && b > 0 && a < b; })(),
-    hasMemberServer: serverLocal.includes('createMemberCommand') && serverLocal.includes('snapshotMember') && serverLocal.includes('ARCHIVE_ROOT') && serverLocal.includes('archive/') && serverLocal.includes('row.status === "running"') && serverLocal.includes('"expert-member"'),
+    hasMemberServer: serverLocal.includes('createMemberCommand') && serverLocal.includes('snapshotMember') && serverLocal.includes('ARCHIVE_ROOT') && serverLocal.includes('archive/') && serverLocal.includes('row.status === "running"') && serverLocal.includes('"member"'),
     hasAgentCli: serverLocal.includes('createAgentCommand') && serverLocal.includes('"dsh-agent"') && serverLocal.includes('runAgentCommand') && serverLocal.includes('makeAgentRoute') && serverLocal.includes('"/plugins/dsh-expert-team"') && serverLocal.includes('resolveLeadAgent') && serverLocal.includes('cachedAgentRoutes') && local.includes('rpcAct') && local.includes('"/plugins/dsh-expert-team/" + act') && local.includes('function askConfirm') && local.includes('runTask') && local.includes('AbortController') && local.includes('}, [actSig])'),
-    hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/expert-import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
+    hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/dsh-agent import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
     noImportBtnCode: !local.includes('slots.inject("conversation.input.left"') && !local.includes('function InputImport'),
     noHeaderSeat: !local.includes('ctx.slots.inject("conversation.session.header.actions"') && !local.includes('function HeaderAction(') && !local.includes('"panel.written"'),
     noPaneSeats: !local.includes('sidebar.right.pane.tab')
@@ -388,7 +388,7 @@ class WS {
     return {clicked:true, btnText:(b.innerText||'').trim()};
   })()`);
   await sleep(800);
-  const cardDraft = await evalJs(`(()=>{const ed=document.querySelector('[data-slot="conversation.draft"]');const v=ed?(ed.value!=null?ed.value:(ed.innerText||ed.textContent||'')):'';return {v:v.slice(0,80),hasSlash:v.includes('/expert-import trading-team'),hasCtx:v.includes('--ctx'),hasAnyCmd:new RegExp('/[a-z0-9-]').test(v)};})()`);
+  const cardDraft = await evalJs(`(()=>{const ed=document.querySelector('[data-slot="conversation.draft"]');const v=ed?(ed.value!=null?ed.value:(ed.innerText||ed.textContent||'')):'';return {v:v.slice(0,80),hasSlash:v.includes('/dsh-agent import trading-team'),hasCtx:v.includes('--ctx'),hasAnyCmd:new RegExp('/[a-z0-9-]').test(v)};})()`);
   log('card-after', JSON.stringify({ probe: cardProbe, state: cardSt, click: cardAfter, draft: cardDraft }));
   fs.writeFileSync(outDir + '/card-create.json', JSON.stringify({ probe: cardProbe, state: cardSt, click: cardAfter, draft: cardDraft }, null, 1));
 

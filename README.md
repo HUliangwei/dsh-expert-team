@@ -5,15 +5,15 @@ DeepSeek Harness（DSH）智能体团队插件：把「模板目录」变成 **A
 
 ## 快速开始
 
-所有写操作（部署 / 任务 / 成员生命周期）走同一个程序可调的执行层 `runAgentCommand`，
-宿主指令、模板卡片、浮窗按钮三路共用；浮窗按钮**点击即执行**（JSON RPC
-`/plugins/dsh-expert-team/<action>`），危险操作（删除任务 / 清空对话 / 归档成员）在浮窗内二次确认。
+**所有指令统一为 `/dsh-agent + 参数`（唯一指令头，CLI 概念）**；写作同一执行层
+`runAgentCommand`，**GUI 浮窗按钮 = 直呼该 `/dsh-agent`**（JSON RPC
+`/plugins/dsh-expert-team/<action>`，危险操作浮窗内二次确认）：
 
 ```text
 /dsh-agent import <模板名> [--ctx fresh|fork] [--model 跟随|名称]   # 一键部署成员/专家团
 /dsh-agent task   <create|claim|complete|reopen|delete|edit|assign># 共享任务生命周期（CAS）
 /dsh-agent member <archive|restock|rename|restore|archive-list> …  # 成员生命周期
-# 旧名 /expert-import|/expert-task|/expert-member 为别名；全部 Lead-only
+# 全部 Lead-only；/dsh-agent 是唯一注册指令，import/member/task 为子命令
 ```
 
 - 模板卡片【创建】：Agent 管理 → 任意模板卡 → 起草 `/dsh-agent import …`，回车即建。
