@@ -304,7 +304,7 @@ class WS {
     hasAgentCli: serverLocal.includes('createAgentCommand') && serverLocal.includes('"dsh-agent"') && serverLocal.includes('runAgentCommand') && serverLocal.includes('makeAgentRoute') && serverLocal.includes('"/plugins/dsh-expert-team"') && serverLocal.includes('resolveLeadAgent') && serverLocal.includes('cachedAgentRoutes') && local.includes('rpcAct') && local.includes('"/plugins/dsh-expert-team/" + act') && local.includes('function askConfirm') && local.includes('runTask') && local.includes('AbortController') && local.includes('}, [actSig])'),
     hasCreateBtn: local.includes('"panel.create"') && local.includes('mentionCmd("team", team.name)') && local.includes('mentionCmd("member", m.name)') && local.includes('"/dsh-agent import " + name') && !local.includes('panel.summon') && !local.includes('importCmd('),
     noImportBtnCode: !local.includes('slots.inject("conversation.input.left"') && !local.includes('function InputImport'),
-    noHeaderSeat: !local.includes('ctx.slots.inject("conversation.session.header.actions"') && !local.includes('function HeaderAction(') && !local.includes('"panel.written"'),
+    hasHeaderTeamBtn: local.includes('slots.inject("conversation.session.header.actions"') && local.includes('"dsh-expert-team-overlay"') && local.includes('function TeamOverlayButton') && local.includes('oetOverlayCard') && local.includes('function TeamOverlayBody'),
     noPaneSeats: !local.includes('sidebar.right.pane.tab')
   };
   log('local', JSON.stringify(localMarks));
