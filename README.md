@@ -3,27 +3,32 @@
 DeepSeek Harness（DSH）智能体团队插件：把「模板目录」变成 **Agent Teams 一键部署** 能力。
 
 成员模板（`templates/members/<name>/`）与专家团模板（`templates/teams/<name>/`）平级存放；
-本插件提供两条创建通道：**宿主 slash 指令 `/expert-import`** 与 **「Agent 管理」模板卡片的【创建】**，
+本插件提供两条创建通道：**宿主 slash 指令 `/dsh-agent`** 与 **「Agent 管理」模板卡片的【创建】**，
 两者都会把专家团/子智能体直接部署进**当前会话的智能体团队**。
 
 ## 特性
 
-### 创建通道
+### 统一执行层（dsh-agent）
 
-- **宿主 slash 指令**（启动横幅即打印本页指令一览）：`/expert-import`（一键部署）、
-  `/expert-member`（归档/恢复/重命名等生命周期）、`/expert-task`（共享任务全生命周期）——
-  均为 Lead-only，草稿式交互（输入框写好、回车即执行）。
+所有写操作（部署/任务/成员生命周期）走同一个**程序可调的命令执行层** `runAgentCommand`：
+宿主 `/dsh-agent` 指令、旧 `/expert-*` 别名、浮窗「直连 JSON RPC」共用它 —— 浮窗按钮点击即执行，
+**不再依赖输入框草稿**。
+
+- **宿主 slash 指令**（启动横幅即打印本页指令一览）：
 
   ```
-  /expert-import <模板名> [--ctx fresh|fork] [--model 跟随|名称]
-  /expert-task   <create|claim|complete|reopen|delete|edit|assign> …
-                 create "<标题>" [--desc …]；assign <任务id> <成员名>；均按最近 revision CAS
+  /dsh-agent import <模板名> [--ctx fresh|fork] [--model 跟随|名称]
+  /dsh-agent task   <create|claim|complete|reopen|delete|edit|assign> …
+                   create "<标题>" [--desc …]；assign <任务id> <成员名>；均按最近 revision CAS
+  /dsh-agent member <archive|restock|rename|restore|archive-list> …
+  /dsh-agent import|task|member … = /expert-import|/expert-task|/expert-member …（旧名为别名）
   ```
 
-  - `<模板名>`：`expert_template_list` 列出的成员/专家团模板
-  - `--ctx fresh`（默认）：子智能体全新上下文、不继承本会话历史
-  - `--ctx fork`：子智能体继承 Lead 已完成轮次作为背景
-  - `--model`：默认跟随会话模型路由
+- **浮窗直连执行**（Round 56）：团队图谱浮窗里的任务/成员按钮**点击即执行**——
+  client `fetch("/plugins/dsh-expert-team/<action>")` JSON RPC → 服务端按 lead 校验 →
+  走同一执行层 → 官方 agentTeams 服务写 → 画布投影自动刷新。
+  需要输入的参数（新建/改标题/转派）在浮窗内迷你输入框完成；**危险操作（删除任务/清空对话/
+  归档成员）在浮窗内二次确认**；置顶为本地状态不经服务端。
 
 - **模板卡片【创建】**：点「Agent 管理」→ 任意模板卡【创建】，输入框自动写好
   `/expert-import <模板名> --ctx fresh --model follow`，回车即创建；参数可在草稿中直接改。
@@ -54,18 +59,19 @@ DeepSeek Harness（DSH）智能体团队插件：把「模板目录」变成 **A
   `dsh-expert-team-taskpin-<leadId>` 持久化）、待认领→认领、进行中→完成/转派、已完成→重开、
   改标题、🗑 删除、＋ 新建。
 - **状态与排序**：pending（📋 待认领）/ in_progress（⚙️ 蓝色呼吸 + 成员连线 + 脉动）/
-  completed（✅ 灰色 done 点）；排序 置顶 → in_progress → pending → 其他。
+  completed（✅ 灰色 done 点）；排序 = 置顶 → revision 降序（**从左到右 = 最新在前**）。
 - **数据**：全部来自官方 `agentTeam.tasks` 投影（含 revision/ownerName/writeScopes）；
-  写操作经宿主 `/expert-task`（CAS：getTask→updateTask withRevision）。
+  写操作走浮窗直连 JSON RPC → 统一执行层 → CAS（getTask→updateTask withRevision）。
 
 ### 管理浮窗（Lead-only，左键单击成员节点）
 
 - **✏️ 重命名**：直连 `sessions.rename` RPC 改会话标题（对话名），画布/列表即时同步。
-- **🔄 清空对话**：起草 `/expert-member restock <名>` → 归档旧对话并重建同名新成员（`-r2` fresh）。
-- **🗑 归档删除**：起草 `/expert-member archive <名>` → 停用 + 历史 JSONL 快照到 `archive/<名>-<时间>/`。
-- **📂 归档浏览 / 恢复**：`/expert-member archive-list` 列归档；`/expert-member restore <目录>` 恢复。
+- **🔄 清空对话**：二次确认后直连执行（`member.restock`）→ 归档旧对话并重建同名新成员（`-rN` fresh）。
+- **🗑 归档删除**：二次确认后直连执行（`member.archive`）→ 停用 + 历史 JSONL 快照到 `archive/<名>-<时间>/`。
+- **📂 归档浏览 / 恢复**：浮窗直读归档列表；`/dsh-agent member restore <目录>` 恢复。
 - **🔗 打开对话**：`uiWorkspace.openSession` 跳到该成员自己的会话页。
 - **lead 节点浮窗 = 创建面板**：全部模板成员（可滚动）+ 3 个专家团，一键起草创建命令。
+- 所有浮窗按钮点击即执行，错误原因红字显示在浮窗内（不再写输入框草稿）。
 
 ### 创建规范（子智能体默认名字 = 对话名字）
 
@@ -116,7 +122,7 @@ dsh-expert-team/
 
 ```
 node --check lib/index.js lib/client.js
-# 内部 e2e：见 test/cdp-e2e.cjs 头部用法（需 DSH headless profile + CDP）；marks 42 项
+# 内部 e2e：见 test/cdp-e2e.cjs 头部用法（需 DSH headless profile + CDP）；marks 43 项
 ```
 
 已知工程纪律（改画布组件时务必遵守）：
@@ -130,7 +136,8 @@ node --check lib/index.js lib/client.js
 
 - **已上线**：画布拓扑（v4 压缩）+ lead 创建浮窗 + 成员管理浮窗（重命名/清空/归档/打开对话/
   归档浏览恢复）+ 创建规范（对话名/头像兜底）+ 默认当前团队页 + **共享任务瀑布**（顶部横向 +
-  滚轮翻页 + 置顶持久化 + 任务浮窗全生命周期 + `/expert-task` 指令）+ 启动横幅。
+  滚轮翻页 + 置顶持久化 + 排序最左最新 + 任务浮窗全生命周期）+ 启动横幅 + **统一执行层
+  `/dsh-agent`**（指令头 + 旧别名）+ **浮窗直连执行 JSON RPC**（不再依赖输入框草稿；危险操作二次确认）。
 - **候选（未实现）**：一键给成员发消息；暂停/继续成员；团队着色区分；节点职业徽标；
   归档云端备份。
 - 备注：一个 Team 的成员上限由 `agent-teams.config.maxMembers` 决定（工具面 8）；roster 只增不减、成员名不复用。
