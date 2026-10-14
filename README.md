@@ -10,11 +10,14 @@ DeepSeek Harness（DSH）智能体团队插件：把「模板目录」变成 **A
 
 ### 创建通道
 
-- **宿主 slash 指令** `/expert-import`（与 `/kantu` 同款交互：菜单行 + 灰字参数提示 + 回车即执行）
+- **宿主 slash 指令**（启动横幅即打印本页指令一览）：`/expert-import`（一键部署）、
+  `/expert-member`（归档/恢复/重命名等生命周期）、`/expert-task`（共享任务全生命周期）——
+  均为 Lead-only，草稿式交互（输入框写好、回车即执行）。
 
   ```
   /expert-import <模板名> [--ctx fresh|fork] [--model 跟随|名称]
-  /expert-import narrative-designer --ctx fork
+  /expert-task   <create|claim|complete|reopen|delete|edit|assign> …
+                 create "<标题>" [--desc …]；assign <任务id> <成员名>；均按最近 revision CAS
   ```
 
   - `<模板名>`：`expert_template_list` 列出的成员/专家团模板
@@ -31,12 +34,29 @@ DeepSeek Harness（DSH）智能体团队插件：把「模板目录」变成 **A
 
 ### 画布（Agent 管理 → 当前团队）
 
-- **星型拓扑 + 圆形节点**：中心 lead 直属所有成员；d3-force 式径向布局、按成员数缩放、
-  拖拽调布局并记忆（localStorage `graph-v4-*`）；一屏放得下（svg `max-height: 56vh`，少滚轮）。
+- **星型拓扑 + 圆形节点**：中心 lead 直属所有成员；径向布局、按成员数缩放、
+  拖拽调布局并记忆（localStorage `graph-v4-*`）；一屏放得下（svg `max-height: 56vh`）。
 - **头像**：成员节点显示圆形头像 —— 已注入的照片优先，否则「模板别名」匹配，兜底为
   「字头 SVG」（渐变圆 + 友好名首字，任何成员都有头像）。
-- **状态可视化**：绿色呼吸光环 = 正在工作；光点沿 lead↔成员连线滑动 = 消息活动（SMIL）。
+- **状态可视化**：绿色呼吸光环 = 正在工作；光点沿 lead↔成员连线滑动 = 消息活动
+  （Web Animations API，坐标经 getScreenCTM 换算与连线严格重合）。
 - **lead 节点**显示主对话标题（不再显示 lead）。
+
+### 共享任务瀑布（顶部横向，Round 54 定稿）
+
+- **布局**：共享任务卡（150×44，徽章 emoji + 状态点 + 标题 + 负责成员）**横向排列在画布
+  顶部**，y=62 处水平分隔线下接拓扑；全部任务进入瀑布（不做条数截断），窗口化渲染。
+- **区内滚轮翻页**：鼠标停在顶部任务条上滚轮（或触控板横滑）→ 卡片**横向翻动**（52px/步，
+  已夹取边界）；拓扑区滚轮不受影响；可滚动时显示「↔ N 个任务 · 滚轮翻动」。
+- **「＋ 新建任务」**：虚线占位卡固定在任务条最左（不随滚动），点击直接弹新建浮窗。
+- **任务卡交互**（左键，与成员节点一致）：指哪儿弹哪儿（`openTaskMenu` 工厂参数绑定，
+  杜绝历史 var 闭包串台 bug）；浮窗动作：📌 置顶/取消置顶（localStorage
+  `dsh-expert-team-taskpin-<leadId>` 持久化）、待认领→认领、进行中→完成/转派、已完成→重开、
+  改标题、🗑 删除、＋ 新建。
+- **状态与排序**：pending（📋 待认领）/ in_progress（⚙️ 蓝色呼吸 + 成员连线 + 脉动）/
+  completed（✅ 灰色 done 点）；排序 置顶 → in_progress → pending → 其他。
+- **数据**：全部来自官方 `agentTeam.tasks` 投影（含 revision/ownerName/writeScopes）；
+  写操作经宿主 `/expert-task`（CAS：getTask→updateTask withRevision）。
 
 ### 管理浮窗（Lead-only，左键单击成员节点）
 
@@ -64,7 +84,7 @@ DeepSeek Harness（DSH）智能体团队插件：把「模板目录」变成 **A
 
 ```
 dsh-expert-team/
-├── lib/                  # client（ModuleLoader 插件）+ server（cordis 插件：工具 + /expert-import、/expert-member 指令）
+├── lib/                  # client（ModuleLoader 插件）+ server（cordis 插件：工具 + /expert-import、/expert-member、/expert-task 指令）
 ├── templates/
 │   ├── members/<name>/   # 成员模板：member.json + agent.md（部分带 avatar.png 头像）
 │   ├── teams/<name>/     # 专家团模板：team.json（sop/lead/members/prompts）+ README
@@ -96,7 +116,7 @@ dsh-expert-team/
 
 ```
 node --check lib/index.js lib/client.js
-# 内部 e2e：见 test/cdp-e2e.cjs 头部用法（需 DSH headless profile + CDP）；marks 38 项
+# 内部 e2e：见 test/cdp-e2e.cjs 头部用法（需 DSH headless profile + CDP）；marks 42 项
 ```
 
 已知工程纪律（改画布组件时务必遵守）：
@@ -109,7 +129,8 @@ node --check lib/index.js lib/client.js
 ## Roadmap / 待办
 
 - **已上线**：画布拓扑（v4 压缩）+ lead 创建浮窗 + 成员管理浮窗（重命名/清空/归档/打开对话/
-  归档浏览恢复）+ 创建规范（对话名/头像兜底）+ 默认当前团队页。
+  归档浏览恢复）+ 创建规范（对话名/头像兜底）+ 默认当前团队页 + **共享任务瀑布**（顶部横向 +
+  滚轮翻页 + 置顶持久化 + 任务浮窗全生命周期 + `/expert-task` 指令）+ 启动横幅。
 - **候选（未实现）**：一键给成员发消息；暂停/继续成员；团队着色区分；节点职业徽标；
   归档云端备份。
 - 备注：一个 Team 的成员上限由 `agent-teams.config.maxMembers` 决定（工具面 8）；roster 只增不减、成员名不复用。
