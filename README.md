@@ -3,6 +3,9 @@
 DeepSeek Harness（DSH）智能体团队插件：把「模板目录」变成 **Agent Teams 一键部署** 能力，
 并提供**团队图谱工作台**（成员星环 + 共享任务瀑布 + 浮窗直连管理）与一条**统一命令执行层**。
 
+> 💡 **接手/开发指引**：新对话先读 [`docs/HANDOVER.md`](docs/HANDOVER.md)（架构、机制、
+> 纪律、常见坑，10 分钟内可接手）；完整逐轮开发日志在 `private/DEVLOG.md`（gitignored，本机）。
+
 ## 快速开始
 
 **所有指令统一为 `/dsh-agent + 参数`（唯一指令头，CLI 概念）**；写作同一执行层
@@ -45,7 +48,8 @@ DeepSeek Harness（DSH）智能体团队插件：把「模板目录」变成 **A
 lib/          client（ModuleLoader 插件，零构建）+ server（cordis：工具 + /dsh-agent + RPC 路由）
 templates/    members/<name>/（member.json + agent.md）· teams/<name>/（team.json）· skills/
 archive/      成员归档快照（.gitignore，本地保留）
-test/         cdp-e2e.cjs（43 marks）+ resource-probe.cjs（资源探针）
+docs/         HANDOVER.md —— 新对话接手手册（架构/机制/纪律/常见坑，接手前必读）
+test/         e2e-boot.ps1（一键回归 43 marks）· cdp-e2e.cjs · resource-probe.cjs · legacy/（历史探针）
 ```
 
 模板字段规范见 `lib/templates.js` 头部注释；安装 = DSH profile bundle（`cordis.patch.yml`
@@ -53,9 +57,9 @@ insert），client 经宿主 ModuleLoader 加载，live 改动 **Ctrl+F5** 生�
 
 ## 开发与隐私
 
-- e2e：`node --check lib/*.js` → 按 `test/cdp-e2e.cjs` 头部用法跑 headless（43 项 marks 断言）；
-  资源审计 `test/resource-probe.cjs`（实测：空载堆 ~23.5MB、DOM ~600、空闲零任务、无泄漏）。
-- 工程纪律：画布组件 hooks 必须全部位于空态早退**之前**（防 React #310）。
+- 一键回归：`pwsh -NoProfile -File test/e2e-boot.ps1`（profile 自愈 + 起服务 + headless 43 marks + 清理）。
+- 资源审计 `test/resource-probe.cjs`（实测：空载堆 ~23.5MB、DOM ~600、空闲零任务、无泄漏）。
+- 工程纪律见 `docs/HANDOVER.md`：hooks 早退纪律、为数据源并轨、e2e marks 同步、隐私扫描正则。
 - 本仓库不含内网地址/凭据/密钥；`private/` 与 `archive/` 均被 `.gitignore` 排除，不回传。
 
 ## Roadmap
