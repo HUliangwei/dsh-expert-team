@@ -56,7 +56,8 @@ Write-Output "[e2e-boot] token=$tok"
 # 5) headless chrome on 9223
 $c2 = Get-CimInstance Win32_Process -Filter "Name='chrome.exe'" | Where-Object { $_.CommandLine -like "*remote-debugging-port=9223*" }
 if (-not $c2) {
-    Start-Process -FilePath "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--headless=new", "--remote-debugging-port=9223", "--user-data-dir=C:\Users\30360\AppData\Local\Temp\dsh-e2e-chrome2", "--no-first-run", "--disable-gpu", "about:blank" -WindowStyle Hidden
+    $cdir = Join-Path $env:USERPROFILE "AppData\Local\Temp\dsh-e2e-chrome2"
+    Start-Process -FilePath "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--headless=new", "--remote-debugging-port=9223", "--user-data-dir=$cdir", "--no-first-run", "--disable-gpu", "about:blank" -WindowStyle Hidden
 }
 for ($i = 0; $i -lt 30; $i++) {
     try { $r = Invoke-WebRequest -Uri "http://127.0.0.1:9223/json/version" -UseBasicParsing -TimeoutSec 2; if ($r.StatusCode -eq 200) { break } } catch {}
